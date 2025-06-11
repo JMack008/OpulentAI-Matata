@@ -20,41 +20,26 @@ export default function useProviderEndpointAutoDiscovery({
   async function autoDetect(isInitialAttempt = false) {
     setLoading(true);
     setAutoDetectAttempted(true);
-    const possibleEndpoints = [];
-    ENDPOINTS.forEach((endpoint) => {
-      possibleEndpoints.push(
-        new Promise((resolve, reject) => {
-          System.customModels(provider, authTokenValue, endpoint, 2_000)
-            .then((results) => {
-              if (!results?.models || results.models.length === 0)
-                throw new Error("No models");
-              resolve({ endpoint, models: results.models });
-            })
-            .catch(() => {
-              reject(`${provider} @ ${endpoint} did not resolve.`);
-            });
-        })
-      );
-    });
-
-    const { endpoint, models } = await Promise.any(possibleEndpoints)
-      .then((resolved) => resolved)
-      .catch(() => {
-        console.error("All endpoints failed to resolve.");
-        return { endpoint: null, models: null };
-      });
-
-    if (models !== null) {
-      setBasePath(endpoint);
-      setBasePathValue(endpoint);
-      setLoading(false);
-      showToast("Provider endpoint discovered automatically.", "success", {
-        clear: true,
-      });
-      setShowAdvancedControls(false);
-      return;
+    
+    for (const endpoint of ENDPOINTS) {
+      try {
+        const results = await System.customModels(provider, authTokenValue, endpoint, 2_000);
+        if (results?.models && results.models.length > 0) {
+          setBasePath(endpoint);
+          setBasePathValue(endpoint);
+          setLoading(false);
+          showToast("Provider endpoint discovered automatically.", "success", {
+            clear: true,
+          });
+          setShowAdvancedControls(false);
+          return;
+        }
+      } catch (error) {
+        console.error(`${provider} @ ${endpoint} did not resolve.`);
+      }
     }
-
+    
+    console.error("All endpoints failed to resolve.");
     setLoading(false);
     setShowAdvancedControls(true);
     showToast(

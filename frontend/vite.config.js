@@ -18,8 +18,8 @@ export default defineConfig({
     format: 'es'
   },
   server: {
-    port: 3000,
-    host: "localhost"
+    port: 3004,
+    host: "0.0.0.0"
   },
   define: {
     "process.env": process.env
@@ -83,5 +83,12 @@ export default defineConfig({
       },
       plugins: []
     }
+  },
+  env: {
+    VITE_API_BASE: 'http://localhost:3002/api',
+    BASE_URL: '/',
+    MODE: 'development',
+    DEV: true,
+    PROD: false
   }
 })

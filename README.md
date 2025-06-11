@@ -267,3 +267,88 @@ This project is [MIT](./LICENSE) licensed.
 [repocloud-deploy]: https://repocloud.io/details/?app_id=276
 [elestio-btn]: https://elest.io/images/logos/deploy-to-elestio-btn.png
 [elestio-deploy]: https://elest.io/open-source/anythingllm
+
+# AnythingLLM - Windows Setup with LM Studio
+
+<p align="center">
+    <b>AnythingLLM:</b> Windows Setup with LM Studio Integration<br />
+    A customized setup for running AnythingLLM on Windows with LM Studio and Vercel deployment.
+</p>
+
+## My Configuration
+
+### Environment Setup
+- **Operating System**: Windows 10 (win32 10.0.26100)
+- **Backend**: Running on ngrok tunnel
+- **Frontend**: Deployed on Vercel
+- **LLM Provider**: LM Studio (openchat_3.5)
+
+### Current URLs
+- Backend: `https://d6de-41-59-166-5.ngrok-free.app`
+- Frontend: Deployed on Vercel
+
+### Environment Variables
+```env
+BACKEND_URL=https://d6de-41-59-166-5.ngrok-free.app
+```
+
+### Vercel Configuration
+The project includes a `vercel.json` for Vercel deployment:
+```json
+{
+  "buildCommand": "cd frontend && npm install && npm run build",
+  "outputDirectory": "frontend/dist",
+  "framework": "vite",
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://d6de-41-59-166-5.ngrok-free.app/api/:path*"
+    }
+  ],
+  "env": {
+    "BACKEND_URL": "https://d6de-41-59-166-5.ngrok-free.app"
+  }
+}
+```
+
+## Windows Setup Instructions
+
+1. **Prerequisites**
+   - Install Node.js
+   - Install Git
+   - Install LM Studio
+   - PowerShell or Command Prompt
+
+2. **Backend Setup**
+   ```powershell
+   # Navigate to server directory
+   cd server
+   
+   # Install dependencies
+   npm install
+   
+   # Create and configure .env.development
+   # Add your configuration settings
+   ```
+
+3. **Frontend Setup**
+   ```powershell
+   # Navigate to frontend directory
+   cd frontend
+   
+   # Install dependencies
+   npm install
+   
+   # Build the frontend
+   npm run build
+   ```
+
+4. **LM Studio Configuration**
+   - Load openchat_3.5 model
+   - Start local server on port 1234
+   - Verify server is running at http://127.0.0.1:1234
+
+5. **Ngrok Setup**
+   - Install ngrok
+   - Run: `ngrok http 3002`
+   - Copy the https URL for BACKEND_URL

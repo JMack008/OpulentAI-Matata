@@ -60,6 +60,10 @@ const { TemporaryAuthToken } = require("../models/temporaryAuthToken");
 function systemEndpoints(app) {
   if (!app) return;
 
+  app.get("/system/health", (_, response) => {
+    response.status(200).json({ status: "ok", timestamp: new Date().toISOString() });
+  });
+
   app.get("/ping", (_, response) => {
     response.status(200).json({ online: true });
   });

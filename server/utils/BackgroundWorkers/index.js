@@ -24,7 +24,7 @@ class BackgroundService {
 
   async boot() {
     const { DocumentSyncQueue } = require("../../models/documentSyncQueue");
-    if (!(await DocumentSyncQueue.enabled())) {
+    if (!process.env.ENABLE_BACKGROUND_WORKER || !(await DocumentSyncQueue.enabled())) {
       this.#log("Feature is not enabled and will not be started.");
       return;
     }

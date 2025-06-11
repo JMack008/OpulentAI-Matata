@@ -31,7 +31,10 @@ const app = express();
 const apiRouter = express.Router();
 const FILE_LIMIT = "3GB";
 
-app.use(cors({ origin: true }));
+app.use(cors({ 
+  origin: process.env.NODE_ENV === "development" ? /^http:\/\/localhost:\d+$/ : true,
+  credentials: true 
+}));
 app.use(bodyParser.text({ limit: FILE_LIMIT }));
 app.use(bodyParser.json({ limit: FILE_LIMIT }));
 app.use(
@@ -45,6 +48,7 @@ if (!!process.env.ENABLE_HTTPS) {
   bootSSL(app, process.env.SERVER_PORT || 3001);
 } else {
   require("@mintplex-labs/express-ws").default(app); // load WebSockets in non-SSL mode.
+  bootHTTP(app, process.env.SERVER_PORT || 3001);
 }
 
 app.use("/api", apiRouter);
@@ -128,7 +132,3 @@ if (process.env.NODE_ENV !== "development") {
 app.all("*", function (_, response) {
   response.sendStatus(404);
 });
-
-// In non-https mode we need to boot at the end since the server has not yet
-// started and is `.listen`ing.
-if (!process.env.ENABLE_HTTPS) bootHTTP(app, process.env.SERVER_PORT || 3001);

@@ -1,0 +1,13 @@
+### Test LM Studio Connection
+POST http://localhost:1234/v1/chat/completions
+Content-Type: application/json
+
+{
+  "model": "mistral-7b-instruct-v0.3",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Hello from Cursor AI. Can you respond?"
+    }
+  ]
+} 
