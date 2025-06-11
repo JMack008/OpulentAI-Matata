@@ -85,10 +85,10 @@ export default defineConfig({
     }
   },
   env: {
-    VITE_API_BASE: 'http://localhost:3002/api',
+    VITE_API_BASE: process.env.VITE_API_BASE || 'http://localhost:3002/api',
     BASE_URL: '/',
-    MODE: 'development',
-    DEV: true,
-    PROD: false
+    MODE: process.env.NODE_ENV || 'development',
+    DEV: process.env.NODE_ENV !== 'production',
+    PROD: process.env.NODE_ENV === 'production'
   }
 })

@@ -5,10 +5,10 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://d6de-41-59-166-5.ngrok-free.app/api/:path*"
+      "destination": "/api/:path*"
     }
   ],
   "env": {
-    "BACKEND_URL": "https://d6de-41-59-166-5.ngrok-free.app"
+    "VITE_API_BASE": "/api"
   }
 }
